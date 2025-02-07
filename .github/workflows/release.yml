@@ -1,27 +1,23 @@
-name: Create Release
+---
+name: "tagged-release"
 
 on:
   push:
     tags:
-      - 'v*'
-permissions:
-  contents: write
+      - "v*"
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # ...
+      - name: "Build & test"
+        run: |
+          echo "done!"
 
-      - name: Create GitHub Release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref_name }}
-          body: ${{ env.RELEASE_BODY }}
-          draft: false
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false

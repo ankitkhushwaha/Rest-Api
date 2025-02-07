@@ -12,11 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Generate GitHub Release Notes
-        run: |
-          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
-          python tools/generate_github_changelog.py >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -25,6 +20,6 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref_name }}
-          body: ${{ env.RELEASE_BODY }}
+          body: ${{ github.ref_name }}
           draft: True
           prerelease: false

@@ -6,16 +6,27 @@ on:
       - v*
 
 permissions:
-  contents: write
+  contents: write  # This is necessary for creating releases
 
 jobs:
   release:
     name: Release pushed tag
     runs-on: ubuntu-22.04
     steps:
-      - name: Create release
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: sudo apt-get install -y gh
+
+      - name: Authenticate with GitHub CLI
+        run: gh auth status
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use default token
           tag: ${{ github.ref_name }}
         run: |
           gh release create "$tag" \

@@ -1,31 +1,26 @@
-name: Create Release
+---
+name: "tagged-release"
+
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
+
 jobs:
-  build:
-    name: Create Release
-    runs-on: ubuntu-latest
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Debug - List Git Refs
-        run: git show-ref
-      - name: Debug - GitHub Context
-        run: echo '${{ toJSON(github) }}'
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # ...
+      - name: "Build & test"
+        run: |
+          echo "done!"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-              prerelease: false
+          files: |
+            LICENSE.txt
+            *.jar

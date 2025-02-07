@@ -1,21 +1,24 @@
-name: Create Release
+name: Create release
 
 on:
   push:
     tags:
-      - "v*"
+      - v*
+
+permissions:
+  contents: write
 
 jobs:
-  create_release:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
+  release:
+    name: Release pushed tag
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Create GitHub Release
-        run: gh release create "$GITHUB_REF_NAME" --title "${GITHUB_REF_NAME#v}" --generate-notes
+      - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --generate-notes

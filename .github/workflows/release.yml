@@ -10,11 +10,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Debug - List Git Refs
+        run: git show-ref
+      - name: Debug - GitHub Context
+        run: echo '${{ toJSON(github) }}'
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
@@ -24,3 +28,4 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
+              prerelease: false
